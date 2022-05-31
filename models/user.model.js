@@ -19,13 +19,6 @@ const userSchema = new mongoose.Schema({
         maxlength: 50,
         index: true
     },
-    // email: {
-    //     type: String,
-    //     unique: true,
-    //     trim: true,
-    //     required: true,
-    //     maxlength: 50
-    // },
     hashed_password: {
         type: String,
         required: true
@@ -55,6 +48,9 @@ userSchema.virtual('password')
     });
 
     userSchema.methods = {
+        authenticate: function(plainText) {
+            return this.encryptPassword(plainText) === this.hashed_password;
+        },
         encryptPassword: function(password) {
             if (!password) return "";
 

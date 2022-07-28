@@ -9,7 +9,10 @@ const expressValidator = require('express-validator');
 require('dotenv').config();
 
 // Import Routes
+const authRoutes = require('./routes/auth.route');
 const userRoutes = require('./routes/user.route');
+const categoryRoutes = require('./routes/category.route');
+const productRoutes = require('./routes/product.route');
 
 // db
 mongoose
@@ -24,7 +27,10 @@ app.use(cookieParser());
 app.use(expressValidator());
 
 // Routes middlewares
+app.use('/api', authRoutes)
 app.use('/api', userRoutes)
+app.use('/api', categoryRoutes)
+app.use('/api', productRoutes);
 
 
 const port = process.env.PORT || 4000;

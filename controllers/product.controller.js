@@ -136,12 +136,43 @@ exports.list = (req, res) => {
         .populate('category')
         .sort([[sortBy, order]])
         .limit(limit)
-        .exec((err, data) => {
+        .exec((err, products) => {
             if (err) {
                 return res.status(400).json({
                     error: 'Pas de résultats'
                 });
             }
-            res.send(data);
+            res.json(products);
         })
+}
+
+/**
+ * it will find products based on the req product category
+ * other products that has the same category, xill be returned
+ */
+exports.listRelated = (req, res) => {
+    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+
+    Product.find({ _id: {$ne: req.product}, category: req.product.category })
+           .limit(limit)
+           .populate('category', '_id name')
+           .exec((err, products) => {
+               if (err) {
+                   return res.status(400).json({
+                       error: "Produits non trouvés"
+                   });
+               }
+               res.json(products)
+           });
+}
+
+exports.listCategories = (req, res) => {
+    Product.distinct('category', {}, (err, categories) => {
+        if (err) {
+            return res.status(400).json({
+                error: 'Catégorie non trouvée'
+            });
+        }
+        res.json(categories);
+    });
 }

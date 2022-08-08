@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    about: {
+        type: String,
+        trim: true
+    },
     salt: String,
     role: {
         type: Number,
@@ -33,7 +37,7 @@ const userSchema = new mongoose.Schema({
         default: []
     }
 },
-{ timeseries: true }
+{ timestamps: true }
 );
 
 // champs virtuel
